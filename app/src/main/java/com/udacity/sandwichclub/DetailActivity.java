@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.udacity.sandwichclub.model.Sandwich;
 import com.udacity.sandwichclub.utils.JsonUtils;
+
+import java.util.List;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -43,7 +46,7 @@ public class DetailActivity extends AppCompatActivity {
             return;
         }
 
-        populateUI();
+        populateUI(sandwich);
         Picasso.with(this)
                 .load(sandwich.getImage())
                 .into(ingredientsIv);
@@ -56,7 +59,32 @@ public class DetailActivity extends AppCompatActivity {
         Toast.makeText(this, R.string.detail_error_message, Toast.LENGTH_SHORT).show();
     }
 
-    private void populateUI() {
+    private void populateUI(Sandwich sandwich) {
 
+        TextView otherNamesTextView = (TextView) findViewById(R.id.also_known_tv);
+        TextView originTextView = (TextView) findViewById(R.id.origin_tv);
+        TextView descriptionTextView = (TextView) findViewById(R.id.description_tv);
+        TextView ingredientsTextView = (TextView) findViewById(R.id.ingredients_tv);
+
+        originTextView.setText(sandwich.getPlaceOfOrigin());
+        descriptionTextView.setText(sandwich.getDescription());
+
+        List<String> otherNames = sandwich.getAlsoKnownAs();
+        for (int i = 0; i < otherNames.size(); i++) {
+            if (i > 0) {
+                otherNamesTextView.append(",\n");
+            }
+            String name = otherNames.get(i);
+            otherNamesTextView.append(name);
+        }
+
+        List<String> ingredients = sandwich.getIngredients();
+        for (int i = 0; i < ingredients.size(); i++) {
+            if (i > 0) {
+                ingredientsTextView.append(",\n");
+            }
+            String ingredient = ingredients.get(i);
+            ingredientsTextView.append(ingredient);
+        }
     }
 }
